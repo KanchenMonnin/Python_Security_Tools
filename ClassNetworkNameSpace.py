@@ -8,9 +8,11 @@
 ######################################
 
 u"""
-Explications
- 
- 
+
+Network namespace can be use if you isolate a process in a 
+container. The network namespace can be to connected with
+openVswitch. With this programme, youc can creat and manage 
+your network namespace.
 
 """
 
@@ -26,35 +28,35 @@ class netns(object):
 
 	def __init__(self, name, network):
 
-		# Nom du network nameSpace
+		# Name of you Netns
 		self.netns_name = name
 
-		# Sous réseau du network nameSpace
+		# network of your namespace
 		# format : 192.168.1.0/24
 		self.netns_net = network
 
 
 	def creat(self,netns_net, netns_name):
 
-		# Activation du routtage pour distribution avec systemd
+		# activation routing forward
 		subprocess.call("echo","net.ipv4.ip_forward = 1",">","/etc/sysctl")
 
-		# Création de l'espace de nommage
+		# create netns
 		subprocess.call(["ip","netns","ad",netns_name])
 
-		# Création des deux cartes virtuelles
+		# Create two virtual eth one for netns and the other one can be connected to openVswitch or
+		# the hote
 		subprocess.call(["ip", "link", "add", "veth0", "type", "veth", "peer", "name", "veth1"])
 
-		# Liaison de la carte veth1 au namespace
 		subprocess.call(["ip", "link", "set", "veth1", "netns", netns_name])
 
-		# Sous réseau du network nameSpace
+		# network of the network nameSpace
 		octet_network = netns_net.split(".")
 
-		# Format sortie : ['192','168,'1',['0','24']]
+		# Format : ['192','168,'1',['0','24']]
 		octet_network[3] = octet_network[3].split("/")
 
-		# Adresse carte veth1 
+		# Adresse interface veth1 
 		for i in octet_network[0,2]:
 
 			addr.
@@ -64,7 +66,7 @@ class netns(object):
 
 		subprocess.call("ip","netns","exec",netname, commande)
 
-	# Rendre la fonction commme étant un object
+	
 	@
 	def my_subprocess(shell):
 
