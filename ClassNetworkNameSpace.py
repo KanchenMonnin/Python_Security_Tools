@@ -39,7 +39,7 @@ class netns(object):
 	def creat(self,netns_net, netns_name):
 
 		# activation routing forward
-		subprocess.call("echo","net.ipv4.ip_forward = 1",">","/etc/sysctl")
+		subprocess.call(["echo","net.ipv4.ip_forward = 1",">","/etc/sysctl"])
 
 		# create netns
 		subprocess.call(["ip","netns","ad",netns_name])
@@ -59,8 +59,11 @@ class netns(object):
 		# Adresse interface veth1 
 		for i in octet_network[0,2]:
 
-			addr.
+			addr += "."+i  
 
+		addr += "."+"102"
+
+		
 
 	def netns_commandes(commande,netns_name):
 
