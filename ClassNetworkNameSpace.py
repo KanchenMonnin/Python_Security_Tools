@@ -61,28 +61,26 @@ class netns(object):
 
 			addr += "."+i  
 
-		addr += "."+"102"
 
-		
+		# veth1		
+		addrVeth1 =addr + "." + "102"
 
-	def netns_commandes(commande,netns_name):
+		# veth0
 
-		subprocess.call("ip","netns","exec",netname, commande)
+		addrVeth0 = addrVeth1 + "." + "101" 
 
+		# Activation veth1
+
+		subprocess.call(["ip","netns","exec",netns_name,"ifconfig","veth1",addrVeth1+"/24","up"])
 	
-	@
-	def my_subprocess(shell):
+		#  add a route to the hote
 
-		commande = shell
+		subprocess.call(["ip","netns","exec",netns_name,"route","add","-net",netns_net,"gw",addrVeth0])
 
-		tab_commande = commande.split(" ")
+		subprocess.call(["ip","addr","add",addrVeth0,"dev","veth0"])
 
-		for i in tab_commande[]:
+		# Activation of veth0
 
-			envoi ="\""+i+"\""+","
+		subprocess.call(["ip","link","set","veth0","up"])
 
-		return subprocess.call([envoi])
-
-
-
-
+		ip link set veth0 up
